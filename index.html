@@ -159,6 +159,28 @@
     text-transform: uppercase;
   }
 
+  /* SITE NAV */
+  .site-nav {
+    background: var(--ink);
+    padding: 0.6rem 0;
+  }
+  .site-nav .container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .site-nav a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .site-nav a:hover { color: var(--paper); }
+  .site-nav a.active { color: var(--paper); }
+
   @media (max-width: 600px) {
     body { font-size: 16px; }
     .part { padding: 1.25rem 1.25rem; }
@@ -167,6 +189,15 @@
 </style>
 </head>
 <body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="active">Home</a>
+    <a href="the-output.html">I. The Output</a>
+    <a href="the-process.html">II. The Process</a>
+    <a href="the-affect.html">III. The Affect</a>
+  </div>
+</nav>
 
 <div class="masthead">
   <div class="container">
