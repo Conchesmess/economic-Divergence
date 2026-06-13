@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Process: Claude's Enumeration</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-light: #4a453f;
+    --ink-faint: #8a847c;
+    --paper: #f7f4ef;
+    --paper-dark: #ede9e2;
+    --paper-darker: #e0dbd2;
+    --rule: #d4cec4;
+    --labor: #1a6b4a;
+    --profit: #1a4a7a;
+    --accent: #c4391a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
+  /* SITE NAV */
+  .site-nav {
+    background: var(--ink);
+    padding: 0.6rem 0;
+  }
+  .site-nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .site-nav a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .site-nav a:hover { color: var(--paper); }
+  .site-nav a.active { color: var(--paper); }
+  .nav-parts { display: flex; gap: 1.5rem; }
+
+  /* MASTHEAD */
+  .masthead {
+    border-bottom: 3px double var(--ink);
+    padding: 2rem 0 1rem;
+    text-align: center;
+    margin-bottom: 0;
+  }
+  .masthead-rule {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 600;
+    line-height: 1.15;
+    max-width: 820px;
+    margin: 0 auto 1rem;
+    letter-spacing: -0.01em;
+  }
+  .deck {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--ink-light);
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    font-weight: 300;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* DROPCAP INTRO */
+  .intro {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 3rem;
+  }
+  .intro p:first-child::first-letter {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 4.5rem;
+    font-weight: 600;
+    float: left;
+    line-height: 0.8;
+    margin: 0.1em 0.1em 0 0;
+    color: var(--accent);
+  }
+  .intro p {
+    margin-bottom: 1.2rem;
+    font-size: 1.05rem;
+    color: var(--ink-light);
+  }
+  .intro p:last-child { margin-bottom: 0; }
+
+  /* BODY TEXT */
+  .body-text {
+    max-width: 680px;
+    margin-bottom: 4rem;
+  }
+  .body-text p {
+    margin-bottom: 1.4rem;
+    font-size: 1rem;
+    color: var(--ink-light);
+    line-height: 1.85;
+  }
+  .body-text p strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .body-text p:last-child { margin-bottom: 0; }
+
+  /* FOOTER */
+  footer {
+    border-top: 3px double var(--ink);
+    margin-top: 4rem;
+    padding: 2rem 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .nav-parts { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html">← Home</a>
+    <span class="nav-parts">
+      <a href="the-output.html">I. The Output</a>
+      <a href="the-process.html" class="active">II. The Process</a>
+      <a href="the-affect.html">III. The Affect</a>
+    </span>
+  </div>
+</nav>
+
+<div class="masthead">
+  <div class="container">
+    <div class="masthead-rule">Part II &nbsp;·&nbsp; As enumerated by Claude</div>
+    <h1>The Process</h1>
+    <p class="deck">What happened in the exchange — described from the AI's point of view.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="intro">
+    <p>This document is Part II of a three-part account. The first part presents the economic analysis itself — the data, the charts, the finding. This part steps back and describes how that analysis was constructed: what one person and one AI each contributed, and what neither could have done alone. The third part describes what the experience felt like from the person's side.</p>
+    <p>What follows is the AI's enumeration. It is written in the third person — "the person," "the AI" — because that distance is accurate. The AI has no first-person stake in this account.</p>
+  </div>
+
+  <div class="body-text">
+    <p>This document was produced through a conversation between a person and an AI language model (Claude, made by Anthropic). The sequence of contributions is worth describing accurately, because it is neither "the person did research" nor "the AI did research" — it was something more specific than either.</p>
+
+    <p><strong>What the person did:</strong> The person noticed two charts on FRED moving in what appeared to be opposite directions — Gross Private Saving climbing, the personal saving rate falling — and formed the intuition that something real was being expressed in that divergence. That intuition was correct, even though the specific charts were not the right vehicle for it. The person then came to the AI to clarify terminology. Throughout the conversation, the person caught two instances where the AI described a chart as showing something it did not in fact show, and said so directly. On both occasions the person's correction was accurate and led to a better framing. The person also articulated the core hypothesis — "corporations are capturing greater value from the economy than households" — in terms precise enough that the AI could identify the correct economic concept (factor shares of national income) and the correct data series to express it. Without that hypothesis, the conversation would not have arrived at the final chart.</p>
+
+    <p><strong>What the AI did:</strong> The AI identified the relevant economic concepts and terminology, explained why the original charts were measuring different things with different denominators, proposed a series of candidate visualizations, built those visualizations from data the person downloaded directly from FRED, corrected its own framing when the person identified errors, identified the BEA NIPA Table 1.11 series as the appropriate data source, computed the charts, and described the three historical inflection points visible in the data. The AI also flagged the limits of what the data establishes — specifically that the divergence in factor shares does not by itself prove causation.</p>
+
+    <p><strong>What neither did:</strong> Neither the person nor the AI independently would have produced this document. The person had the intuition and the critical judgment but not the economic vocabulary or the knowledge of which FRED series to use. The AI had access to the relevant economic concepts and data series but had no observation to explain — only a question to answer. The final chart and its interpretation required both.</p>
+
+    <p><strong>A note on the AI's role more precisely:</strong> The AI did not "understand" the data in the way a human economist would. It matched patterns in the conversation to patterns in its training — descriptions of economic concepts, relationships between data series, historical events associated with particular periods. When it described a chart incorrectly, it was not lying or guessing; it was producing output that fit the conversational context but did not accurately reflect what the data showed. The person's correction mechanism — looking at the chart and saying "that's not what I see" — was essential to arriving at an accurate result. The AI is a productive tool when used with that kind of critical oversight. It is not a substitute for it.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    Part II of III &nbsp;·&nbsp; <a href="index.html">Return to home</a>
+  </div>
+</footer>
+
+</body>
+</html>

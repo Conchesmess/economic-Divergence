@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Output: Who Captures the Economy?</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-light: #4a453f;
+    --ink-faint: #8a847c;
+    --paper: #f7f4ef;
+    --paper-dark: #ede9e2;
+    --paper-darker: #e0dbd2;
+    --rule: #d4cec4;
+    --labor: #1a6b4a;
+    --profit: #1a4a7a;
+    --accent: #c4391a;
+    --band-80: rgba(110,60,160,0.09);
+    --band-80-border: rgba(110,60,160,0.35);
+    --band-08: rgba(190,40,40,0.09);
+    --band-08-border: rgba(190,40,40,0.35);
+    --band-covid: rgba(160,120,20,0.09);
+    --band-covid-border: rgba(160,120,20,0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
+  /* SITE NAV */
+  .site-nav {
+    background: var(--ink);
+    padding: 0.6rem 0;
+  }
+  .site-nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .site-nav a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .site-nav a:hover { color: var(--paper); }
+  .site-nav a.active { color: var(--paper); }
+  .nav-parts { display: flex; gap: 1.5rem; }
+
+  /* MASTHEAD */
+  .masthead {
+    border-bottom: 3px double var(--ink);
+    padding: 2rem 0 1rem;
+    text-align: center;
+    margin-bottom: 0;
+  }
+  .masthead-rule {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 600;
+    line-height: 1.15;
+    max-width: 820px;
+    margin: 0 auto 1rem;
+    letter-spacing: -0.01em;
+  }
+  .masthead h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .deck {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--ink-light);
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .byline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* DROPCAP INTRO */
+  .intro {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 3rem;
+  }
+  .intro p:first-child::first-letter {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 4.5rem;
+    font-weight: 600;
+    float: left;
+    line-height: 0.8;
+    margin: 0.1em 0.1em 0 0;
+    color: var(--accent);
+  }
+  .intro p {
+    margin-bottom: 1.2rem;
+    font-size: 1.05rem;
+  }
+
+  /* SECTION HEADERS */
+  .section {
+    margin-bottom: 3.5rem;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section p {
+    margin-bottom: 1.1rem;
+    color: var(--ink-light);
+    font-size: 0.98rem;
+  }
+  .section p strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* CHART WRAPPER */
+  .chart-wrap {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 1.5rem 1.5rem 1rem;
+    margin: 1.5rem 0 2rem;
+    box-shadow: 2px 3px 0 var(--paper-darker);
+  }
+  .chart-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--ink);
+  }
+  .chart-subtitle {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+  .chart-canvas-wrap {
+    position: relative;
+    width: 100%;
+    height: 380px;
+  }
+  .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 0.75rem 0 0.25rem;
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .chart-legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .swatch {
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .swatch-dash {
+    width: 20px;
+    height: 0;
+    border-top: 3px dashed var(--profit);
+    display: inline-block;
+  }
+  .chart-source {
+    font-size: 10px;
+    color: var(--ink-faint);
+    margin-top: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.6;
+    border-top: 1px solid var(--paper-dark);
+    padding-top: 0.5rem;
+  }
+  .chart-source a {
+    color: var(--profit);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .chart-source a:hover { border-bottom-color: var(--profit); }
+
+  /* CALLOUT BOXES */
+  .callout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  .callout {
+    border-left: 3px solid var(--rule);
+    padding: 1rem 1.25rem;
+    background: white;
+  }
+  .callout.c-80 { border-left-color: #6e3ca0; }
+  .callout.c-08 { border-left-color: #be2828; }
+  .callout.c-covid { border-left-color: #a07814; }
+  .callout-year {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .callout.c-80 .callout-year { color: #6e3ca0; }
+  .callout.c-08 .callout-year { color: #be2828; }
+  .callout.c-covid .callout-year { color: #a07814; }
+  .callout-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.6rem;
+  }
+  .callout p {
+    font-size: 0.82rem;
+    color: var(--ink-light);
+    line-height: 1.55;
+    margin-bottom: 0.5rem;
+  }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* STAT PULL QUOTES */
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 2rem 0;
+  }
+  .stat-cell {
+    background: white;
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+  }
+  .stat-number {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.8rem;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .stat-cell:first-child .stat-number { color: var(--labor); }
+  .stat-cell:last-child .stat-number { color: var(--profit); }
+  .stat-desc {
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 3px double var(--ink);
+    margin-top: 4rem;
+    padding: 2rem 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  footer a { color: var(--profit); text-decoration: none; }
+
+  /* PULL QUOTE */
+  blockquote {
+    border-left: 4px solid var(--accent);
+    margin: 2rem 0;
+    padding: 0.5rem 1.5rem;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .stat-row { grid-template-columns: 1fr; }
+    .stat-number { font-size: 2rem; }
+    body { font-size: 16px; }
+    .nav-parts { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html">← Home</a>
+    <span class="nav-parts">
+      <a href="the-output.html" class="active">I. The Output</a>
+      <a href="the-process.html">II. The Process</a>
+      <a href="the-affect.html">III. The Affect</a>
+    </span>
+  </div>
+</nav>
+
+<div class="masthead">
+  <div class="container">
+    <div class="masthead-rule">Part I &nbsp;·&nbsp; An economic data investigation &nbsp;·&nbsp; FRED / BEA &nbsp;·&nbsp; 1948–2024</div>
+    <h1>Who Captures the Economy?<br><em>Labor vs. Capital</em> in America</h1>
+    <p class="deck">Seventy-six years of national income data reveal a slow but unmistakable transfer of economic value — from workers to corporations.</p>
+    <div class="byline">Data: U.S. Bureau of Economic Analysis via FRED &nbsp;·&nbsp; Federal Reserve Bank of St. Louis</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="intro">
+    <p>Every dollar of economic output in America gets divided up. Some goes to workers as wages and benefits. Some goes to corporations as profit. The question of how that division shifts over time is one of the most consequential — and most contested — questions in economics.</p>
+    <p>This analysis starts from a simple observation: two charts on the Federal Reserve's FRED database appear to move in opposite directions over the decades. Gross Private Saving trends steadily upward. The personal saving rate trends steadily downward. Unpacking why led to a more precise and more striking finding: as a share of the total economy, <strong>labor's piece of the pie has shrunk while corporate profits' piece has grown</strong> — and the divergence has accelerated markedly since 2008.</p>
+    <p>What follows traces that investigation, from the original charts through to the clearest expression of the underlying story.</p>
+  </div>
+
+  <!-- SECTION 1: THE QUESTION -->
+  <div class="section">
+    <div class="section-label">The starting point</div>
+    <h2>Two Charts Moving in Opposite Directions</h2>
+    <p>The original observation was that <strong>Gross Private Saving</strong> (GPSAVE) — total saving by households and businesses, in nominal dollars — trends steeply upward over the decades, while the <strong>personal saving rate</strong> — what households save as a percentage of their disposable income — trends steeply downward.</p>
+    <p>These are not really inverses. Gross Private Saving is denominated in growing nominal dollars and includes business saving (retained corporate profits plus depreciation), which has expanded enormously. The personal saving rate is a ratio that captures only household behavior. The apparent mirror image is largely an artifact of different denominators and different scopes.</p>
+    <p>But the intuition behind the observation was sound: <em>something</em> is diverging. The search for the right way to see it led to factor shares of national income.</p>
+  </div>
+
+  <!-- SECTION 2: THE RIGHT FRAMING -->
+  <div class="section">
+    <div class="section-label">Finding the right measure</div>
+    <h2>Shares of the Same Pie</h2>
+    <p>The cleanest way to test whether corporations are capturing greater value from the economy than households is to measure both as a share of the <strong>same total</strong>. The BEA's National Income and Product Accounts (NIPA) do exactly this in Table 1.11, which expresses components of national income as a percentage of Gross Domestic Income.</p>
+    <p>Two series from that table tell the story directly:</p>
+    <p><strong style="color:var(--labor);">Labor's share</strong> — compensation of employees (wages, salaries, benefits) as a percentage of GDI. This captures what workers receive for their labor out of total economic output.</p>
+    <p><strong style="color:var(--profit);">Corporate profit share</strong> — after-tax corporate profits (with inventory valuation and capital consumption adjustments) as a percentage of GDI. This captures what corporations retain after paying taxes.</p>
+    <p>Because both use the same denominator, one rising and the other falling is a direct, apples-to-apples statement about the redistribution of economic output.</p>
+
+    <div class="stat-row">
+      <div class="stat-cell">
+        <div class="stat-number">−8.9<span style="font-size:1.5rem;">pts</span></div>
+        <div class="stat-desc">Labor share decline<br>1970 peak → 2024<br>(51.6% → 42.7%)</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number">+4.7<span style="font-size:1.5rem;">pts</span></div>
+        <div class="stat-desc">Profit share increase<br>1982 trough → 2024<br>(4.3% → 9.2%)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: THE MAIN CHART -->
+  <div class="section">
+    <div class="section-label">The full picture</div>
+    <h2>76 Years of Divergence</h2>
+    <p>The chart below shows both series from 1948 through 2024. Three inflection points are highlighted — moments when economic or policy shocks appear to have durably shifted the balance between labor and capital.</p>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Labor compensation and corporate profits as shares of Gross Domestic Income</div>
+      <div class="chart-subtitle">United States, 1948–2024, annual</div>
+      <div class="chart-legend">
+        <span><span class="swatch" style="background:var(--labor);"></span> Labor compensation (% of GDI, left axis)</span>
+        <span><span class="swatch-dash"></span> Corporate profits after tax (% of GDI, right axis)</span>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="mainChart" role="img" aria-label="Labor share of GDI falls from 51% in 1970 to 43% in 2024. Corporate profit share rises from 4% in the early 1980s to over 9% in 2024."></canvas>
+      </div>
+      <div class="chart-source">
+        Source: U.S. Bureau of Economic Analysis via FRED (Federal Reserve Bank of St. Louis) · BEA NIPA Table 1.11 · Annual, not seasonally adjusted<br>
+        Labor share: <a href="https://fred.stlouisfed.org/series/W270RE1A156NBEA">W270RE1A156NBEA</a> &nbsp;·&nbsp;
+        Corporate profit share: <a href="https://fred.stlouisfed.org/series/W273RE1A156NBEA">W273RE1A156NBEA</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: THREE INFLECTION POINTS -->
+  <div class="section">
+    <div class="section-label">Three inflection points</div>
+    <h2>The Moments That Shifted the Balance</h2>
+    <p>The data shows not a smooth, gradual drift but a series of structural breaks — moments when the rules of the economy changed and the shares reset to a new level.</p>
+
+    <div class="callout-grid">
+      <div class="callout c-80">
+        <div class="callout-year">1980–83</div>
+        <div class="callout-label">The structural break</div>
+        <p><strong>What happened:</strong> The Volcker Fed raised interest rates to nearly 20% to break inflation, triggering a severe recession. Reagan fired striking air traffic controllers in 1981, fundamentally altering the balance of power between employers and labor. Deregulation accelerated, the shareholder value movement took hold, and globalization began opening American labor markets to international competition.</p>
+        <p><strong>What followed:</strong> Labor share fell from ~51% in 1970 to ~46% by the mid-1980s and never recovered to postwar levels. This was not a cyclical dip — it was a permanent reset. Corporate profits stabilized and began a long upward climb.</p>
+      </div>
+      <div class="callout c-08">
+        <div class="callout-year">2008–09</div>
+        <div class="callout-label">The hinge</div>
+        <p><strong>What happened:</strong> The financial crisis wiped out vast household wealth — primarily home equity. The federal government and Federal Reserve intervened aggressively to rescue the financial system through TARP, near-zero interest rates, and quantitative easing, which rapidly reflated asset prices.</p>
+        <p><strong>What followed:</strong> Corporate profits recovered within two years and surged to historic highs, fueled by cheap borrowing, cost-cutting, and suppressed wage growth. Labor share fell to its lowest levels since World War II and stayed there through the entire subsequent expansion.</p>
+      </div>
+      <div class="callout c-covid">
+        <div class="callout-year">2020–21</div>
+        <div class="callout-label">The anomaly</div>
+        <p><strong>What happened:</strong> The pandemic triggered the sharpest GDP contraction since the Depression. Massive government stimulus — direct payments, enhanced unemployment, PPP loans — temporarily inflated household income, nudging labor share upward. Many businesses shuttered or contracted sharply.</p>
+        <p><strong>What followed:</strong> The apparent labor recovery evaporated almost immediately. As stimulus ended and supply chain disruptions enabled companies to raise prices faster than wages, corporate profit share surged to its <em>highest level in the entire 76-year dataset</em> — over 9% of GDI. The COVID spike in labor share was a transfer payment artifact, not a structural change.</p>
+      </div>
+    </div>
+
+    <blockquote>
+      "The post-2008 recovery was real in GDP terms — but the gains flowed almost entirely to the profit side. In previous expansions, labor share would stabilize or recover. After 2008, it just kept falling."
+    </blockquote>
+  </div>
+
+  <!-- SECTION 5: ZOOMED CHART -->
+  <div class="section">
+    <div class="section-label">Zoomed view</div>
+    <h2>The Post-2008 Divergence in Detail</h2>
+    <p>The chart below zooms into 2000–2024, where the divergence is sharpest. At this scale the 2008 hinge is unmistakable: labor share peaks at 44.8% at the moment of crisis, then falls almost without interruption. Corporate profits dip briefly, then rocket upward.</p>
+    <p>By 2024, the gap between the two series is the widest it has been in the entire dataset.</p>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Labor and corporate profit shares of GDI, 2000–2024</div>
+      <div class="chart-subtitle">Zoomed to show post-2008 divergence</div>
+      <div class="chart-legend">
+        <span><span class="swatch" style="background:var(--labor);"></span> Labor compensation (% of GDI, left axis)</span>
+        <span><span class="swatch-dash"></span> Corporate profits after tax (% of GDI, right axis)</span>
+      </div>
+      <div class="chart-canvas-wrap" style="height:340px;">
+        <canvas id="zoomChart" role="img" aria-label="Zoomed chart 2000 to 2024. Labor share falls from 44.8% in 2008 to 42.7% in 2024. Corporate profit share rises from 4.8% in 2008 to 9.2% in 2024."></canvas>
+      </div>
+      <div class="chart-source">
+        Source: U.S. Bureau of Economic Analysis via FRED (Federal Reserve Bank of St. Louis) · BEA NIPA Table 1.11 · Annual, not seasonally adjusted<br>
+        Labor share: <a href="https://fred.stlouisfed.org/series/W270RE1A156NBEA">W270RE1A156NBEA</a> &nbsp;·&nbsp;
+        Corporate profit share: <a href="https://fred.stlouisfed.org/series/W273RE1A156NBEA">W273RE1A156NBEA</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: CAVEATS -->
+  <div class="section">
+    <div class="section-label">What the data does and doesn't show</div>
+    <h2>An Honest Reading</h2>
+    <p>The divergence shown here is real and well-documented. A few caveats are worth keeping in mind:</p>
+    <p><strong>Causation is not established.</strong> The data shows that labor share has fallen as corporate profit share has risen. It does not prove that one caused the other. Both could reflect common underlying drivers — globalization, technology, industry concentration — rather than a direct transfer.</p>
+    <p><strong>Labor compensation includes benefits.</strong> The labor share series captures total compensation including employer-paid healthcare and pension contributions, not just wages. Rising healthcare costs mean that some of the apparent stability in labor share through the 1990s reflects rising benefit costs, not rising take-home pay.</p>
+    <p><strong>Corporate profits are volatile.</strong> The profit share series swings sharply with the business cycle — it collapsed in recessions and surged in recoveries. The trend is real, but individual years can be misleading.</p>
+    <p><strong>The 2020s data may not be the final word.</strong> The post-COVID profit surge coincided with unusual supply chain dynamics and pricing power. Whether the profit share remains above 9% of GDI through a more normal economic environment remains to be seen.</p>
+    <p>None of these caveats change the central finding: over 76 years, and especially since 2008, the share of national economic output flowing to labor has declined while the share flowing to corporate profits has risen. That is what the data shows.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    Data: U.S. Bureau of Economic Analysis · FRED, Federal Reserve Bank of St. Louis ·
+    <a href="https://fred.stlouisfed.org/series/W270RE1A156NBEA">W270RE1A156NBEA</a> ·
+    <a href="https://fred.stlouisfed.org/series/W273RE1A156NBEA">W273RE1A156NBEA</a>
+    <br><br>
+    All data downloaded directly from fred.stlouisfed.org · No data was altered or estimated
+  </div>
+</footer>
+
+<script>
+var labor = {
+  "1948":49.3,"1949":49.7,"1950":49.3,"1951":49.9,"1952":50.9,"1953":51.6,
+  "1954":50.9,"1955":50.1,"1956":50.7,"1957":50.6,"1958":50.2,"1959":49.8,
+  "1960":50.2,"1961":49.8,"1962":49.5,"1963":49.3,"1964":49.3,"1965":49.0,
+  "1966":49.5,"1967":50.1,"1968":50.3,"1969":51.0,"1970":51.6,"1971":50.6,
+  "1972":50.2,"1973":49.9,"1974":50.2,"1975":48.7,"1976":48.5,"1977":48.2,
+  "1978":48.1,"1979":48.5,"1980":48.8,"1981":47.7,"1982":47.6,"1983":46.9,
+  "1984":46.2,"1985":46.3,"1986":46.7,"1987":46.9,"1988":46.6,"1989":46.3,
+  "1990":46.7,"1991":46.4,"1992":46.3,"1993":45.9,"1994":45.3,"1995":45.3,
+  "1996":45.1,"1997":45.2,"1998":45.8,"1999":46.1,"2000":46.6,"2001":46.3,
+  "2002":45.3,"2003":44.7,"2004":44.2,"2005":43.4,"2006":43.1,"2007":44.2,
+  "2008":44.8,"2009":43.7,"2010":42.5,"2011":42.4,"2012":42.2,"2013":42.0,
+  "2014":42.1,"2015":42.7,"2016":43.1,"2017":43.3,"2018":43.2,"2019":43.4,
+  "2020":44.5,"2021":43.5,"2022":42.7,"2023":42.7,"2024":42.7
+};
+var profit = {
+  "1948":6.5,"1949":6.6,"1950":5.7,"1951":5.0,"1952":5.1,"1953":4.8,
+  "1954":5.2,"1955":6.1,"1956":5.6,"1957":5.3,"1958":4.8,"1959":5.7,
+  "1960":5.5,"1961":5.4,"1962":6.1,"1963":6.4,"1964":6.8,"1965":7.4,
+  "1966":7.3,"1967":6.8,"1968":6.3,"1969":5.4,"1970":4.5,"1971":5.0,
+  "1972":5.4,"1973":5.1,"1974":4.0,"1975":4.7,"1976":5.3,"1977":5.7,
+  "1978":5.9,"1979":5.2,"1980":4.0,"1981":4.6,"1982":4.3,"1983":4.9,
+  "1984":5.5,"1985":5.4,"1986":4.3,"1987":4.4,"1988":4.5,"1989":4.1,
+  "1990":3.8,"1991":4.2,"1992":4.3,"1993":4.5,"1994":5.4,"1995":5.7,
+  "1996":6.1,"1997":6.5,"1998":5.6,"1999":5.4,"2000":4.3,"2001":4.2,
+  "2002":5.6,"2003":6.1,"2004":6.9,"2005":7.1,"2006":7.3,"2007":6.0,
+  "2008":4.8,"2009":6.1,"2010":7.5,"2011":7.5,"2012":8.0,"2013":7.8,
+  "2014":7.9,"2015":7.5,"2016":7.2,"2017":7.3,"2018":7.5,"2019":7.6,
+  "2020":7.8,"2021":9.4,"2022":8.9,"2023":9.2,"2024":9.2
+};
+
+function makeChart(canvasId, yearFilter, leftMin, leftMax, rightMin, rightMax, bands) {
+  var allYears = Object.keys(labor).filter(function(y){ return profit[y]!=null; }).sort();
+  var years = yearFilter ? allYears.filter(yearFilter) : allYears;
+  var laborVals = years.map(function(y){ return labor[y]; });
+  var profitVals = years.map(function(y){ return profit[y]; });
+
+  var gridColor = "rgba(0,0,0,0.06)";
+  var tickColor = "#8a847c";
+
+  var bandPlugin = {
+    id: "bands_"+canvasId,
+    beforeDraw: function(chart) {
+      var ctx = chart.ctx;
+      var xAxis = chart.scales.x;
+      var yAxis = chart.scales.yLeft;
+      bands.forEach(function(b) {
+        var i1 = years.indexOf(b.start);
+        var i2 = years.indexOf(b.end);
+        if (i1<0||i2<0) return;
+        var x1 = xAxis.getPixelForValue(i1);
+        var x2 = xAxis.getPixelForValue(i2+1);
+        var top = yAxis.top, bottom = yAxis.bottom;
+        ctx.save();
+        ctx.fillStyle = b.color;
+        ctx.fillRect(x1, top, x2-x1, bottom-top);
+        ctx.strokeStyle = b.border;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3,3]);
+        ctx.beginPath(); ctx.moveTo(x1,top); ctx.lineTo(x1,bottom); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x2,top); ctx.lineTo(x2,bottom); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = "rgba(0,0,0,0.38)";
+        ctx.font = "bold 9px 'JetBrains Mono', monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(b.label, (x1+x2)/2, top+13);
+        ctx.restore();
+      });
+    }
+  };
+
+  new Chart(document.getElementById(canvasId), {
+    type: "line",
+    plugins: [bandPlugin],
+    data: {
+      labels: years,
+      datasets: [
+        {
+          data: laborVals,
+          borderColor: "#1a6b4a",
+          backgroundColor: "transparent",
+          borderWidth: 2.5,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          tension: 0.3,
+          yAxisID: "yLeft"
+        },
+        {
+          data: profitVals,
+          borderColor: "#1a4a7a",
+          backgroundColor: "transparent",
+          borderWidth: 2.5,
+          borderDash: [6,3],
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          tension: 0.3,
+          yAxisID: "yRight"
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: "rgba(26,24,20,0.92)",
+          titleFont: { family: "'JetBrains Mono', monospace", size: 11 },
+          bodyFont: { family: "'JetBrains Mono', monospace", size: 11 },
+          callbacks: {
+            label: function(ctx) {
+              if (ctx.datasetIndex===0) return "  Labor: "+ctx.parsed.y.toFixed(1)+"% of GDI";
+              return "  Profits: "+ctx.parsed.y.toFixed(1)+"% of GDI";
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: tickColor, font: { size: 11, family: "'JetBrains Mono', monospace" }, maxTicksLimit: 14, autoSkip: true },
+          grid: { color: gridColor }
+        },
+        yLeft: {
+          type: "linear", position: "left",
+          min: leftMin, max: leftMax,
+          title: { display: true, text: "Labor compensation (% of GDI)", color: "#1a6b4a", font: { size: 10, family: "'JetBrains Mono', monospace" } },
+          ticks: { color: "#1a6b4a", font: { size: 11 }, callback: function(v){ return v.toFixed(0)+"%"; } },
+          grid: { color: gridColor }
+        },
+        yRight: {
+          type: "linear", position: "right",
+          min: rightMin, max: rightMax,
+          title: { display: true, text: "Corporate profits (% of GDI)", color: "#1a4a7a", font: { size: 10, family: "'JetBrains Mono', monospace" } },
+          ticks: { color: "#1a4a7a", font: { size: 11 }, callback: function(v){ return v.toFixed(0)+"%"; } },
+          grid: { drawOnChartArea: false }
+        }
+      }
+    }
+  });
+}
+
+var fullBands = [
+  { start:"1980", end:"1983", color:"rgba(110,60,160,0.09)", border:"rgba(110,60,160,0.35)", label:"Early 1980s shift" },
+  { start:"2008", end:"2009", color:"rgba(190,40,40,0.09)", border:"rgba(190,40,40,0.35)", label:"Financial crisis" },
+  { start:"2020", end:"2021", color:"rgba(160,120,20,0.09)", border:"rgba(160,120,20,0.35)", label:"COVID" }
+];
+
+var zoomBands = [
+  { start:"2008", end:"2009", color:"rgba(190,40,40,0.09)", border:"rgba(190,40,40,0.35)", label:"Financial crisis" },
+  { start:"2020", end:"2021", color:"rgba(160,120,20,0.09)", border:"rgba(160,120,20,0.35)", label:"COVID" }
+];
+
+makeChart("mainChart", null, 40, 55, 0, 15, fullBands);
+makeChart("zoomChart", function(y){ return parseInt(y)>=2000; }, 41, 48, 3, 11, zoomBands);
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>So this thing happened...</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-light: #4a453f;
+    --ink-faint: #8a847c;
+    --paper: #f7f4ef;
+    --paper-dark: #ede9e2;
+    --paper-darker: #e0dbd2;
+    --rule: #d4cec4;
+    --labor: #1a6b4a;
+    --profit: #1a4a7a;
+    --accent: #c4391a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
+  .masthead {
+    border-bottom: 3px double var(--ink);
+    padding: 3rem 0 1.5rem;
+    text-align: center;
+    margin-bottom: 0;
+  }
+  .masthead-rule {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .intro {
+    padding: 3rem 0 2.5rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 3.5rem;
+  }
+  .intro p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--ink-light);
+    margin-bottom: 1.2rem;
+  }
+  .intro p:last-child { margin-bottom: 0; }
+  .intro p:first-child::first-letter {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 4.5rem;
+    font-weight: 600;
+    float: left;
+    line-height: 0.8;
+    margin: 0.1em 0.1em 0 0;
+    color: var(--accent);
+  }
+  .intro .bridge {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--ink);
+    margin-top: 1.5rem;
+  }
+
+  .parts {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 4rem;
+  }
+  .part {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--rule);
+    border-bottom: none;
+    background: white;
+    padding: 1.75rem 2rem;
+    box-shadow: 2px 3px 0 var(--paper-darker);
+    transition: background 0.15s;
+    position: relative;
+  }
+  .part:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+  .part:hover {
+    background: var(--paper-dark);
+  }
+  .part-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.4rem;
+  }
+  .part h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.3rem;
+    color: var(--ink);
+  }
+  .part-sub {
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+  .part-arrow {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--rule);
+    transition: color 0.15s, right 0.15s;
+  }
+  .part:hover .part-arrow {
+    color: var(--ink-faint);
+    right: 1.6rem;
+  }
+
+  footer {
+    border-top: 3px double var(--ink);
+    margin-top: 2rem;
+    padding: 2rem 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .part { padding: 1.25rem 1.25rem; }
+    .part-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="container">
+    <div class="masthead-rule">An investigation &nbsp;·&nbsp; Data, AI, and one person's attempt to know something</div>
+    <h1>So this thing happened&#8230;</h1>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="intro">
+    <p>I heard an interesting fact on the Internets and wanted to know more. When I learned more I realized I had an interesting insight. When I tried to dig deeper, it was clear that I needed to do a lot of learning to suss out an answer. So, instead of choosing to do a lot of learning, or just choosing to move on to the next thing, I turned to an AI, Claude.ai.</p>
+    <p class="bridge">This is the story of my exchange with Claude, told in three parts.</p>
+  </div>
+
+  <div class="parts">
+    <a class="part" href="the-output.html">
+      <div class="part-label">Part I</div>
+      <h2>The Output</h2>
+      <div class="part-sub">The insight, the hypothesis and the result</div>
+      <span class="part-arrow">→</span>
+    </a>
+    <a class="part" href="the-process.html">
+      <div class="part-label">Part II</div>
+      <h2>The Process</h2>
+      <div class="part-sub">Claude's enumeration of what happened</div>
+      <span class="part-arrow">→</span>
+    </a>
+    <a class="part" href="the-affect.html">
+      <div class="part-label">Part III</div>
+      <h2>The Affect</h2>
+      <div class="part-sub">What it felt like to me, a card carrying AI hater.</div>
+      <span class="part-arrow">→</span>
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    Data: U.S. Bureau of Economic Analysis &nbsp;·&nbsp; FRED, Federal Reserve Bank of St. Louis
+  </div>
+</footer>
+
+</body>
+</html>
