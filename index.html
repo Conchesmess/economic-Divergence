@@ -87,64 +87,52 @@
     margin-top: 1.5rem;
   }
 
-  .parts {
+  /* PIE NAVIGATION */
+  .pie-nav {
     display: flex;
-    flex-direction: column;
-    gap: 0;
+    justify-content: center;
     margin-bottom: 4rem;
   }
-  .part {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    border: 1px solid var(--rule);
-    border-bottom: none;
-    background: white;
-    padding: 1.75rem 2rem;
-    box-shadow: 2px 3px 0 var(--paper-darker);
-    transition: background 0.15s;
-    position: relative;
+  .pie-chart {
+    width: 100%;
+    max-width: 400px;
   }
-  .part:last-child {
-    border-bottom: 1px solid var(--rule);
+  .slice-group {
+    cursor: pointer;
   }
-  .part:hover {
-    background: var(--paper-dark);
+  .slice-output {
+    transition: transform 0.2s ease;
   }
-  .part-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    margin-bottom: 0.4rem;
+  .slice-output:hover {
+    transform: translate(7px, -4px);
   }
-  .part h2 {
+  .slice-process {
+    transition: transform 0.2s ease;
+  }
+  .slice-process:hover {
+    transform: translate(0, 8px);
+  }
+  .slice-affect {
+    transition: transform 0.2s ease;
+  }
+  .slice-affect:hover {
+    transform: translate(-7px, -4px);
+  }
+  .slice-label-main {
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+    font-size: 18px;
     font-weight: 600;
-    line-height: 1.2;
-    margin-bottom: 0.3rem;
-    color: var(--ink);
+    fill: white;
+    text-anchor: middle;
+    pointer-events: none;
   }
-  .part-sub {
-    font-size: 0.9rem;
-    color: var(--ink-faint);
-    font-style: italic;
-  }
-  .part-arrow {
-    position: absolute;
-    right: 2rem;
-    top: 50%;
-    transform: translateY(-50%);
+  .slice-label-sub {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 1.1rem;
-    color: var(--rule);
-    transition: color 0.15s, right 0.15s;
-  }
-  .part:hover .part-arrow {
-    color: var(--ink-faint);
-    right: 1.6rem;
+    font-size: 10px;
+    fill: rgba(255,255,255,0.6);
+    text-anchor: middle;
+    letter-spacing: 2px;
+    pointer-events: none;
   }
 
   footer {
@@ -183,8 +171,7 @@
 
   @media (max-width: 600px) {
     body { font-size: 16px; }
-    .part { padding: 1.25rem 1.25rem; }
-    .part-arrow { display: none; }
+    .pie-chart { max-width: 300px; }
   }
 </style>
 </head>
@@ -193,9 +180,9 @@
 <nav class="site-nav">
   <div class="container">
     <a href="index.html" class="active">Home</a>
-    <a href="the-output.html">I. The Output</a>
-    <a href="the-process.html">II. The Process</a>
-    <a href="the-affect.html">III. The Affect</a>
+    <a href="the-output.html">The Output</a>
+    <a href="the-process.html">The Process</a>
+    <a href="the-affect.html">The Affect</a>
   </div>
 </nav>
 
@@ -213,25 +200,37 @@
     <p class="bridge">This is the story of my exchange with Claude, told in three parts.</p>
   </div>
 
-  <div class="parts">
-    <a class="part" href="the-output.html">
-      <div class="part-label">Part I</div>
-      <h2>The Output</h2>
-      <div class="part-sub">The insight, the hypothesis and the result</div>
-      <span class="part-arrow">→</span>
-    </a>
-    <a class="part" href="the-process.html">
-      <div class="part-label">Part II</div>
-      <h2>The Process</h2>
-      <div class="part-sub">Claude's enumeration of what happened</div>
-      <span class="part-arrow">→</span>
-    </a>
-    <a class="part" href="the-affect.html">
-      <div class="part-label">Part III</div>
-      <h2>The Affect</h2>
-      <div class="part-sub">What it felt like to me, a card carrying AI hater.</div>
-      <span class="part-arrow">→</span>
-    </a>
+  <div class="pie-nav">
+    <svg viewBox="0 0 400 400" class="pie-chart" role="navigation" aria-label="Choose a section">
+
+      <a href="the-output.html">
+        <g class="slice-group slice-output">
+          <path d="M 200 200 L 200 40 A 160 160 0 0 1 338.56 280 Z"
+                fill="#1a6b4a" stroke="#f7f4ef" stroke-width="2"/>
+          <text x="276" y="148" class="slice-label-sub">THE</text>
+          <text x="276" y="169" class="slice-label-main">Output</text>
+        </g>
+      </a>
+
+      <a href="the-process.html">
+        <g class="slice-group slice-process">
+          <path d="M 200 200 L 338.56 280 A 160 160 0 0 1 61.44 280 Z"
+                fill="#1a4a7a" stroke="#f7f4ef" stroke-width="2"/>
+          <text x="200" y="283" class="slice-label-sub">THE</text>
+          <text x="200" y="304" class="slice-label-main">Process</text>
+        </g>
+      </a>
+
+      <a href="the-affect.html">
+        <g class="slice-group slice-affect">
+          <path d="M 200 200 L 61.44 280 A 160 160 0 0 1 200 40 Z"
+                fill="#c4391a" stroke="#f7f4ef" stroke-width="2"/>
+          <text x="124" y="148" class="slice-label-sub">THE</text>
+          <text x="124" y="169" class="slice-label-main">Affect</text>
+        </g>
+      </a>
+
+    </svg>
   </div>
 
 </div>
