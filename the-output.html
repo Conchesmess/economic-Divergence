@@ -336,6 +336,7 @@
     .stat-number { font-size: 2rem; }
     body { font-size: 16px; }
     .nav-parts { display: none; }
+    .pie-comparison { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -365,6 +366,22 @@
     <p>Every dollar of economic output in America gets divided up. Some goes to workers as wages and benefits. Some goes to corporations as profit. The question of how that division shifts over time is one of the most consequential — and most contested — questions in economics.</p>
     <p>This analysis starts from a simple observation: two charts on the Federal Reserve's FRED database appear to move in opposite directions over the decades. Gross Private Saving trends steadily upward. The personal saving rate trends steadily downward. Unpacking why led to a more precise and more striking finding: as a share of the total economy, <strong>labor's piece of the pie has shrunk while corporate profits' piece has grown</strong> — and the divergence has accelerated markedly since 2008.</p>
     <p>What follows traces that investigation, from the original charts through to the clearest expression of the underlying story.</p>
+  </div>
+
+  <!-- PREVIEW CHART -->
+  <div class="chart-wrap" style="margin-bottom:3.5rem;">
+    <div class="chart-title">Labor compensation and corporate profits as shares of Gross Domestic Income</div>
+    <div class="chart-subtitle">United States, 1948–2024 · Inflection points explored in detail below</div>
+    <div class="chart-legend">
+      <span><span class="swatch" style="background:var(--labor);"></span> Labor compensation (% of GDI, left axis)</span>
+      <span><span class="swatch-dash"></span> Corporate profits after tax (% of GDI, right axis)</span>
+    </div>
+    <div class="chart-canvas-wrap" style="height:300px;">
+      <canvas id="previewChart" role="img" aria-label="Overview chart: labor share falls from ~51% in 1970 to ~43% in 2024 while corporate profit share rises from ~4% in the early 1980s to over 9% in 2024."></canvas>
+    </div>
+    <div class="chart-source">
+      Source: U.S. Bureau of Economic Analysis via FRED · BEA NIPA Table 1.11 · Annual, not seasonally adjusted
+    </div>
   </div>
 
   <!-- SECTION 1: THE QUESTION -->
@@ -658,6 +675,7 @@ var zoomBands = [
   { start:"2020", end:"2021", color:"rgba(160,120,20,0.09)", border:"rgba(160,120,20,0.35)", label:"COVID" }
 ];
 
+makeChart("previewChart", null, 40, 55, 0, 15, []);
 makeChart("mainChart", null, 40, 55, 0, 15, fullBands);
 makeChart("zoomChart", function(y){ return parseInt(y)>=2000; }, 41, 48, 3, 11, zoomBands);
 </script>
